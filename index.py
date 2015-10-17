@@ -32,7 +32,16 @@ class IndexHandler(webapp2.RequestHandler):
     return service
 
   def post(self):
-    msg = self.request.get('msg')
+    payloadType = 'text'
+    msg = self.request.get('msg').strip()
+    if not msg:
+      logging.debug('loading body')
+      msg = self.request.body
+      if not msg:
+        self.abort(400)
+        return
+      msg = json.loads(msg)
+      payloadType = 'struct'
     cloud_logging = self._get_service()
     from google.appengine.api.app_identity import app_identity
     projectsId = app_identity.get_application_id()
@@ -51,10 +60,11 @@ class IndexHandler(webapp2.RequestHandler):
             "serviceName": "compute.googleapis.com",
             "severity": severity,
           },
-          "textPayload": msg,
+          payloadType + "Payload": msg,
         },
       ]
     }
+    logging.debug(logs)
     resp = cloud_logging.projects().logs().entries().write(projectsId=projectsId, logsId=logsId, body=logs).execute()
     logging.info(json.dumps(resp, sort_keys=True, indent=4))
     self.response.write('log saved')
