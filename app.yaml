@@ -1,0 +1,37 @@
+runtime: python27
+api_version: 1
+threadsafe: false
+
+inbound_services:
+- warmup
+- channel_presence
+
+builtins:
+- appstats: on
+- remote_api: on
+- deferred: on
+
+skip_files:
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+- ^tmp/.*
+
+handlers:
+- url: /
+  script: index.app
+
+libraries:
+- name: ssl
+  version: latest
+
+- name: jinja2
+  version: latest
+
+- name: webapp2
+  version: latest
+
+- name: pycrypto
+  version: latest

@@ -1,0 +1,14 @@
+# vim stuffs
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+# python
+*.pyc
+
+# our project
+privatekey.json
+.gcloud/*
